@@ -1,0 +1,14 @@
+﻿#pragma kernel CSMain
+
+RWStructuredBuffer<float3> bufferXYZ;
+float realtimeSinceStartup;
+
+[numthreads(1000, 1, 1)] // x方向をスレッド数で定義
+void CSMain (uint3 groupThreadID : SV_GroupThreadID)
+{
+	int x = groupThreadID.x - 500;
+	for (int z = -500; z < 500; z++) { // z方向をforで定義
+		float y = sin(sqrt((x * x) + (z * z)) / 10 + realtimeSinceStartup) * 3;
+		bufferXYZ[(z + 500) + (x + 500) * 1000].y = y;
+	}
+}
